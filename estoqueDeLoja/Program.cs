@@ -46,9 +46,8 @@ void RegistrarProdutos()
     Console.Clear();
     Console.WriteLine("Registro de produtos\n");
     string produto = ValidarInformacoes("Informe o nome do produto: ");
-    string quantidadeDoProduto = ValidarInformacoes("\nInforme a quantidade do produto: ");
-    int quantidade = int.Parse(quantidadeDoProduto);
-    estoque.Add(produto, quantidade);
+    int quantidadeDoProduto = ValidarConversao("\nInforme a quantidade do produto: ");
+    estoque.Add(produto, quantidadeDoProduto);
     Console.WriteLine("\nO produto foi registrado com sucesso!");
     Thread.Sleep(2000);
     ExibirMenu();
@@ -63,7 +62,7 @@ string ValidarInformacoes(string mensagem)
     {
         Console.Write(mensagem);
         entrada = Console.ReadLine();
-
+        
         if (string.IsNullOrWhiteSpace(entrada))
         {
             Console.WriteLine("\nInformação inválida!");
@@ -72,6 +71,27 @@ string ValidarInformacoes(string mensagem)
     while (string.IsNullOrWhiteSpace(entrada));
 
     return entrada;
+}
+
+// para garantir que os dados númericos sejam válidos
+int ValidarConversao (string mensagem)
+{
+    int numerico;
+    string? entrada;
+
+    do
+    {
+        Console.Write(mensagem);
+        entrada = Console.ReadLine();
+
+        if (!int.TryParse(entrada, out numerico))
+        {
+            Console.WriteLine("\nInformação inválida!");
+        }
+    }
+    while (!int.TryParse(entrada, out numerico));
+
+    return numerico;
 }
 
 void ExibirProdutosRegistrados()
@@ -135,12 +155,11 @@ void AcoesDeAlteracao(int opcao, string produto)
 
 void RemoverProduto(string produto)
 {
-    string valorInformado = ValidarInformacoes("Qual a quantidade do produto que você deseja remover: ");
-    int quantidade = int.Parse(valorInformado);
+    int valorInformado = ValidarConversao("Qual a quantidade do produto que você deseja remover: ");
 
-    if (estoque[produto] > quantidade)
+    if (estoque[produto] > valorInformado)
     {
-        estoque[produto] -= quantidade;
+        estoque[produto] -= valorInformado;
         Console.WriteLine("Remoção feita com sucesso!");
     } else
     {
@@ -150,9 +169,8 @@ void RemoverProduto(string produto)
 
 void AdicionarProduto(string produto)
 {
-    string valorInformado = ValidarInformacoes("Qual a quantidade do produto que você deseja adicionar: ");
-    int quantidade = int.Parse(valorInformado);
-    estoque[produto] += quantidade;
+    int valorInformado = ValidarConversao("Qual a quantidade do produto que você deseja adicionar: ");
+    estoque[produto] += valorInformado;
     Console.WriteLine("A quantidade do produto em estoque foi atualizada!");
 }
 
