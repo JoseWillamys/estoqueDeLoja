@@ -157,9 +157,15 @@ void RemoverProduto(string produto)
 {
     int valorInformado = ValidarConversao("Qual a quantidade do produto que você deseja remover: ");
 
-    if (estoque[produto] > valorInformado)
+    if (estoque[produto] >= valorInformado)
     {
         estoque[produto] -= valorInformado;
+        
+        if (estoque[produto] == 0)
+        {
+            estoque.Remove(produto);
+        }
+
         Console.WriteLine("Remoção feita com sucesso!");
     } else
     {
